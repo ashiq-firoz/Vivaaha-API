@@ -34,7 +34,36 @@ const userSchema = new mongoose.Schema({
   },
   verificationTokenExpiry: {
     type: Date
-  }
+  },
+  addressline1:{
+    type: String,
+    default: ""
+  },
+  adressline2:{
+    type : String,
+    default: ""
+  },
+  city:{
+    type:String,
+    default : ""
+  },
+  state:{
+    type:String,
+    default:"",
+  },
+  country:{
+    type:String,
+    default:""
+  },
+  pin:{
+    type:String,
+    default:"",
+  },
+  phone : {
+    type : String,
+    default:""
+  },
+ 
 }, {
   timestamps: true
 });
