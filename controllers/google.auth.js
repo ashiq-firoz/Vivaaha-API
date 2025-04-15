@@ -1,5 +1,6 @@
 //controllers/google.auth.js
 const jwt = require('jsonwebtoken');
+const Freelancer = require('../models/Freelancer');
 
 const googleAuthController = {
     // Handle Google auth callback
@@ -23,9 +24,15 @@ const googleAuthController = {
             if(req.user.addressline1 == ""){
                 isnew = 1;
             }
-            
-            // Redirect to frontend with token
-            res.redirect(`${process.env.FRONTEND_URL}/auth/google/success?token=${token}&isnew=${isnew}`);
+            let isbrand = "0"; // 0 means not a freelancer, 1 means freelancer
+            const freelancer = await Freelancer.findOne({ userId: req.user._id });
+
+            if (freelancer) {
+                isbrand = "1";
+            }
+
+            // Redirect to frontend with token, isnew, and isbrand
+            res.redirect(`${process.env.FRONTEND_URL}/auth/google/success?token=${token}&isnew=${isnew}&isbrand=${isbrand}`);
 
         } catch (error) {
             console.error('Google auth callback error:', error);

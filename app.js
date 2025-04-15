@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const passport = require('./config/passport');
 require('dotenv').config();
-
+const path = require('path');
 
 // Import routes
 const authRoutes = require('./routes/auth');
@@ -12,7 +12,11 @@ const googleAuthRoutes = require('./routes/google.auth');
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: ['*',"http://localhost:3000"],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(passport.initialize());
@@ -41,7 +45,14 @@ app.use("/api/messages", require("./routes/message"));
 
 // Basic route
 app.get('/', (req, res) => {
-    res.json({ message: 'Welcome to the Online Shop API' });
+    res.json({ message: 'Vivaha API' });
+});
+
+
+
+app.get('/uploads/:folder/:file', (req, res) => {
+    const { folder, file } = req.params;
+    res.sendFile(path.join(__dirname, '.', 'uploads', folder, file));
 });
 
 // 404 handler

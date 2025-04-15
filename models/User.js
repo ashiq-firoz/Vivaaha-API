@@ -63,10 +63,17 @@ const userSchema = new mongoose.Schema({
     type : String,
     default:""
   },
+  renewed : {
+    type : String,
+    default : "",
+  },
+  expriry : {
+    type : String,
+    default : "",
+  }
  
 }, {
   timestamps: true
 });
-
 const User = mongoose.model('User', userSchema);
 module.exports = User;
