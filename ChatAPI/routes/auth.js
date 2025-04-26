@@ -96,61 +96,7 @@ router.post('/business-data-submission', authMiddleware, upload.single('proofFil
 // Protected routes
 router.post('/change-password', authMiddleware, authController.changePassword);
 
-router.get('/profile', authMiddleware, async (req, res) => {
-    try {
-        const user = await User.findById(req.user.id).select('-password -verificationToken -verificationTokenExpiry ');
-        if (!user) {
-            return res.status(404).json({ success: false, message: 'User not found' });
-        }
-        res.json({ success: true, user });
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Error fetching profile' });
-    }
+router.get('/profile', authMiddleware, (req, res) => {
+    res.json({ user: req.user });
 });
-
-router.post('/update-profile', authMiddleware, async (req, res) => {
-    try {
-        const { 
-            firstName, 
-            lastName, 
-            email, 
-            phone, 
-            addressline1, 
-            adressline2, 
-            city, 
-            state, 
-            country, 
-            pin 
-        } = req.body;
-
-        const user = await User.findById(req.user.id);
-        
-        if (!user) {
-            return res.status(404).json({ success: false, message: 'User not found' });
-        }
-
-        const updatedUser = await User.findByIdAndUpdate(
-            req.user.id,
-            { 
-                firstName,
-                lastName, 
-                email, 
-                phone,
-                addressline1,
-                addressline2: adressline2, // correcting typo in field name
-                city,
-                state,
-                country,
-                pin
-            },
-            { new: true }
-        ).select('-password -verificationToken -verificationTokenExpiry');
-
-        res.json({ success: true, user: updatedUser });
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Error updating profile' });
-    }
-});
-
-
 module.exports = router;

@@ -4,13 +4,8 @@ const BookingSchema = new mongoose.Schema(
   {
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     freelancerId: { type: mongoose.Schema.Types.ObjectId, ref: "Freelancer", required: true },
-    eventDates: [{ type: String, required: true }], 
-    totalcost : {type: Number},
-    contact:{type:String},
-    servicename: {type:String},
-    status: { type: String, enum: ["pending", "confirmed", "completed", "cancelled"], default: "pending" },
-    paymentid:{type:String},
-    orderdate:{type:Date},
+    eventDate: { type: Date, required: true },
+    status: { type: String, enum: ["pending", "confirmed", "completed", "cancelled"], default: "pending" }
   },
   { timestamps: true }
 );

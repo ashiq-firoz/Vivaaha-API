@@ -1,0 +1,35 @@
+<form id="designForm" enctype="multipart/form-data">
+    <input type="file" name="images" multiple accept="image/*" required>
+    <input type="text" name="title" required>
+    <input type="text" name="description">
+    <input type="number" name="price" step="0.01" required>
+    <input type="text" name="category" required>
+    <select name="isPublic">
+        <option value="true">Public</option>
+        <option value="false">Private</option>
+    </select>
+    <button type="submit">Upload Design</button>
+</form>
+
+<script>
+document.getElementById('designForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    
+    try {
+        const response = await fetch('http://localhost:3000/api/adddesign', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer your-token'
+            },
+            body: formData
+        });
+        
+        const data = await response.json();
+        console.log(data);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+});
+</script>
