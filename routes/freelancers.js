@@ -102,7 +102,7 @@ router.post('/business/get-data', authMiddleware, async (req, res) => {
         message: 'No business data found for this user'
       });
     }
-
+    //console.log(businessData)
     return res.status(200).json({
       success: true,
       data: businessData
@@ -128,8 +128,8 @@ router.post(
   ]), 
   async (req, res) => {
     try {
-      console.log('Received files:', req.files);
-      console.log('Received body:', req.body);
+      // console.log('Received files:', req.files);
+      // console.log('Received body:', req.body);
 
       const userId = req.user._id;
       const { 
@@ -139,7 +139,10 @@ router.post(
         category,
         location,
         bio,
-        pricing
+        pricing,
+        ifscCode,
+        panNumber,
+        bankAccountNumber
       } = req.body;
 
       // Initialize the freelance data with matching field names
@@ -151,7 +154,10 @@ router.post(
         category: category || "Venues",
         location: location || "",
         bio: bio || "",
-        pricing: pricing ? Number(pricing) : 0
+        pricing: pricing ? Number(pricing) : 0,
+        pan:panNumber,
+        account_no:bankAccountNumber,
+        ifsc:ifscCode
       };
 
       // Handle file uploads

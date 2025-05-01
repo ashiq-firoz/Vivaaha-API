@@ -19,9 +19,22 @@ router.post("/",auth, async (req, res) => {
   }
 });
 
+router.post("/public", async (req, res) => {
+  try {
+    let id = req.body.vendor
+    if(req.body.vendor=="1"){
+      id = req.user.id;
+    }
+    const reviews = await Review.find({ freelancerId: id });
+    res.json(reviews);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 router.post("/review", auth, async (req, res) => {
   try {
-    console.log(req.body);
+    //console.log(req.body);
     
     // Create new review
     const review = new Review({

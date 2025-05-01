@@ -32,7 +32,8 @@ router.post("/bookservice", authMiddleware, async (req, res) => {
       totalcost:totalPrice,
       contact:cnt,
       servicename:companyName,
-      status:"confirmed" //todo: change it when pay gateway is done
+      status:"confirmed", //todo: change it when pay gateway is done
+      event_completion_date: dates[dates.length - 1]
     });
     console.log(booking)
     await booking.save();

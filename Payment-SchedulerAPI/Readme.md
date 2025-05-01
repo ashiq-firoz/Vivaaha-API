@@ -1,0 +1,1 @@
+npm install @mailchimp/mailchimp_transactional
