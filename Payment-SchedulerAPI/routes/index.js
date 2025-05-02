@@ -3,6 +3,7 @@ const Booking = require('../models/Booking');
 const User = require('../models/User');
 const { getOrderId, verifyPayment } = require('../helpers/razorpay_helper');
 const auth = require('../middleware/auth_pay');
+const { SendMail } = require('../helpers/mailing');
 var router = express.Router();
 
 
@@ -84,8 +85,9 @@ router.post("/verifypayment", async (req, res) => {
       booking.status = "confirmed";
       booking.paymentid = req.body.razorpay_order_id;
       await booking.save();
-      console.log(booking)
-      console.log("success")
+      // console.log(booking)
+      // console.log("success")
+      SendMail("Your Booking is confirmed and payment done processing","Booking COnfirmation","qdeveloper08@gmail.com");
       let url = process.env.SUCCESS_URL;
       res.redirect(url);
       }

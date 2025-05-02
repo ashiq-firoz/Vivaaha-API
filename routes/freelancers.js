@@ -157,7 +157,8 @@ router.post(
         pricing: pricing ? Number(pricing) : 0,
         pan:panNumber,
         account_no:bankAccountNumber,
-        ifsc:ifscCode
+        ifsc:ifscCode,
+        linkaccount : "",
       };
 
       // Handle file uploads
@@ -174,6 +175,47 @@ router.post(
         }
       }
 
+      
+    // const payload = {
+    //   name:companyname,
+    //   email:companymailid,
+    //   tnc_accepted: true,
+    //   account_details: {
+    //     business_name:companyname,
+    //     business_type:'individual'
+    //   },
+    //   bank_account: {
+    //     ifsc_code:ifscCode,
+    //     beneficiary_name:companyname,
+    //     account_type:'current',
+    //     account_number:bankAccountNumber
+    //   }
+    // };
+    
+    // const RAZORPAY_API_URL = 'https://api.razorpay.com/v1/beta/accounts';
+    // const RAZORPAY_KEY_ID = process.env.RAZOPAY_KEY
+    // const RAZORPAY_KEY_SECRET = process.env.RAZOPAY_SECRET
+
+    // const response = await fetch(RAZORPAY_API_URL, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'Authorization': 'Basic ' + Buffer.from(`${RAZORPAY_KEY_ID}:${RAZORPAY_KEY_SECRET}`).toString('base64')
+    //   },
+    //   body: JSON.stringify(payload)
+    // });
+
+    // const data = await response.json();
+
+    // if (response.ok) {
+    //   console.log('✅ Account created:', data.id);
+    //   //res.status(200).json({ account_id: data.id });
+    // } else {
+    //   console.error('❌ Razorpay API error:', data);
+    //   res.status(response.status).json({ error: data });
+    // }
+    
+    // freelanceData.linkaccount = data.id;
       // Find existing record by userId
       const existingRecord = await Freelancer.findOne({ userId });
       let result;

@@ -53,6 +53,7 @@ const FreelancerSchema = new mongoose.Schema(
     pan: {type:String},
     account_no:{type:String},
     ifsc:{type:String},
+    linkaccount:{type:String},
   },
   { timestamps: true }
 );
