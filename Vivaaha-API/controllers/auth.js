@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 const authController = {
   async register(req, res) {
     try {
-      const { email, password, firstName, lastName } = req.body;
+      const { email, password } = req.body;
 
       // Input validation
       if (!email || !password) {
@@ -34,8 +34,8 @@ const authController = {
       const user = new User({
         email,
         password: hashedPassword,
-        firstName,
-        lastName,
+        firstName:" ",
+        lastName :" ",
         authType: 'email',
         verificationToken,
         verificationTokenExpiry: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
@@ -49,9 +49,9 @@ const authController = {
 
       // Send verification email
       const emailContent = `
-        Hello ${firstName || 'there'},
+        Hello ,
 
-        Thank you for registering with DesignersDen! To complete your registration, please verify your email address by clicking the link below:
+        Thank you for registering with Vivaaha ! To complete your registration, please verify your email address by clicking the link below:
 
         ${verificationUrl}
 
@@ -60,10 +60,10 @@ const authController = {
         If you didn't create this account, please ignore this email.
 
         Best regards,
-        The DesignersDen Team
+        Vivaaha Support
       `;
 
-      const emailSubject = 'Welcome to DesignersDen - Verify Your Email';
+      const emailSubject = 'Welcome to Vivaaha- Verify Your Email';
 
       try {
         await SendMail(emailContent, emailSubject, email);

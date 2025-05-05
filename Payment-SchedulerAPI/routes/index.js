@@ -51,7 +51,7 @@ router.post("/getorderid",auth ,async (req, res) => {
       if (response!=false){
         console.log(orderId)
         console.log(booking)
-        res.status(200).send({ "orderid": orderId,"bookingid":booking._id });
+        res.status(200).send({ "orderid": orderId,"bookingid":booking._id,"email:":user.email });
       }
       else{
         res.status(500).send({ error: "Failed to create order" });
@@ -70,6 +70,7 @@ router.post("/verifypayment", async (req, res) => {
     console.log(req.body.razorpay_signature);
     console.log(req.body.razorpay_order_id);
     console.log(req.query.id)
+    console.log(req.query.email)
 
     verifyPayment(req.body).then(async (response) => {
       if (response == false) {
@@ -87,7 +88,7 @@ router.post("/verifypayment", async (req, res) => {
       await booking.save();
       // console.log(booking)
       // console.log("success")
-      SendMail("Your Booking is confirmed and payment done processing","Booking COnfirmation","qdeveloper08@gmail.com");
+      SendMail("Your Booking is confirmed and payment done processing","Booking COnfirmation",req.query.email);
       let url = process.env.SUCCESS_URL;
       res.redirect(url);
       }

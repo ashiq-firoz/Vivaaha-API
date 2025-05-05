@@ -8,12 +8,13 @@ const path = require('path');
 // Import routes
 const authRoutes = require('./routes/auth');
 const googleAuthRoutes = require('./routes/google.auth');
+const auth = require('./middleware/auth');
 
 const app = express();
 
 // Middleware
 app.use(cors({
-    origin: ['*',"http://localhost:3000"],
+    origin: ['*',"https://wedding-planner-weld.vercel.app","http://localhost:3000"],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -47,6 +48,10 @@ app.use("/api/messages", require("./routes/message"));
 app.get('/', (req, res) => {
     res.json({ message: 'Vivaha API' });
 });
+
+app.post("/api",auth,(req,res)=>{
+    res.json({status:"True"});
+})
 
 
 

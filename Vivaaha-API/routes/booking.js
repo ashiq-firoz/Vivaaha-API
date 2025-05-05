@@ -76,7 +76,7 @@ router.post("/bookedDates", authMiddleware, async (req, res) => {
     const { freelancerId } = req.body;
     const bookings = await Booking.find({ 
       freelancerId,
-      status: { $ne: "cancelled" }
+      status: "confirmed"
     }).select('eventDates');
     
     const bookedDates = bookings.reduce((dates, booking) => {
