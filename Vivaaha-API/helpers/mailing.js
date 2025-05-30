@@ -3,6 +3,34 @@
 const axios = require('axios');
 const MAILSERVER_URL = process.env.MAILSERVER_URL;
 const url = new URL(MAILSERVER_URL);
+const mailchimp = require('@mailchimp/mailchimp_transactional')(process.env.MAILCHIMP_KEY); 
+
+
+async function sendMailChimpEmail(subject, content, recipientEmail) {
+  try {
+    const response = await mailchimp.messages.send({
+      message: {
+        from_email: process.env.SENDER_EMAIL, 
+        subject: subject,
+        text: content,
+        to: [
+          {
+            email: recipientEmail,
+            type: 'to',
+          },
+        ],
+      },
+    });
+    console.log('Email sent successfully:', response);
+    return response;
+  } catch (error) {
+    console.error('Error sending email:', error);
+    throw error;
+  }
+}
+
+
+
 
 async function SendMail(content, subject,ToEmail) {
     try {
@@ -23,5 +51,6 @@ async function SendMail(content, subject,ToEmail) {
 }
 
 module.exports = {
-    SendMail
+    SendMail,
+    sendMailChimpEmail
 };

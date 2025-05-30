@@ -316,136 +316,136 @@ router.post('/freelance/delete', async (req, res) => {
   }
 });
 
-// // POST route to create/update a business
-// router.post('/business', 
-//   authMiddleware, // Add authentication middleware
-//   upload.fields([
-//     { name: 'mainImage', maxCount: 1 },
-//     { name: 'galleryImages', maxCount: 4 }
-//   ]),
-//   async (req, res) => {
-//     try {
-//       const {
-//         id,  // For updates
-//         companyname,
-//         companymailid,
-//         registrationno,
-//         category,
-//         location,
-//         bio,
-//         pricing
-//       } = req.body;
+// POST route to create/update a business
+router.post('/business', 
+  authMiddleware, // Add authentication middleware
+  upload.fields([
+    { name: 'mainImage', maxCount: 1 },
+    { name: 'galleryImages', maxCount: 4 }
+  ]),
+  async (req, res) => {
+    try {
+      const {
+        id,  // For updates
+        companyname,
+        companymailid,
+        registrationno,
+        category,
+        location,
+        bio,
+        pricing
+      } = req.body;
 
-//       console.log(req.body)
-//       console.log(req.user)
-//       // Get userId from authenticated user
-//       const userId = req.user._id;
+      console.log(req.body)
+      console.log(req.user)
+      // Get userId from authenticated user
+      const userId = req.user._id;
       
 
-//       // Validate required fields
-//       if (!companyname || !companymailid) {
-//         return res.status(400).json({
-//           success: false,
-//           message: 'Missing required fields: companyname and companymailid are mandatory'
-//         });
-//       }
+      // Validate required fields
+      if (!companyname || !companymailid) {
+        return res.status(400).json({
+          success: false,
+          message: 'Missing required fields: companyname and companymailid are mandatory'
+        });
+      }
 
-//       // Prepare business data
-//       const businessData = {
-//         userId,
-//         companyname,
-//         companymailid,
-//         registrationno: registrationno || '',
-//         category: category || 'Venues',
-//         location: location || '',
-//         bio: bio || '',
-//         pricing: pricing ? Number(pricing) : 0
-//       };
+      // Prepare business data
+      const businessData = {
+        userId,
+        companyname,
+        companymailid,
+        registrationno: registrationno || '',
+        category: category || 'Venues',
+        location: location || '',
+        bio: bio || '',
+        pricing: pricing ? Number(pricing) : 0
+      };
 
-//       // Rest of the code remains the same...
-//       if (req.files) {
-//         if (req.files.mainImage && req.files.mainImage[0]) {
-//           businessData.image1 = req.files.mainImage[0].path;
-//         }
+      // Rest of the code remains the same...
+      if (req.files) {
+        if (req.files.mainImage && req.files.mainImage[0]) {
+          businessData.image1 = req.files.mainImage[0].path;
+        }
 
-//         if (req.files.galleryImages) {
-//           const galleryFiles = req.files.galleryImages;
-//           for (let i = 0; i < Math.min(galleryFiles.length, 4); i++) {
-//             businessData[`image${i+2}`] = galleryFiles[i].path;
-//           }
-//         }
-//       }
+        if (req.files.galleryImages) {
+          const galleryFiles = req.files.galleryImages;
+          for (let i = 0; i < Math.min(galleryFiles.length, 4); i++) {
+            businessData[`image${i+2}`] = galleryFiles[i].path;
+          }
+        }
+      }
 
-//       let result;
-//       let oldImages = {};
+      let result;
+      let oldImages = {};
 
-//       if (id) {
-//         const existingBusiness = await Freelancer.findById(id);
-//         if (!existingBusiness) {
-//           return res.status(404).json({
-//             success: false,
-//             message: 'Business not found'
-//           });
-//         }
+      if (id) {
+        const existingBusiness = await Freelancer.findById(id);
+        if (!existingBusiness) {
+          return res.status(404).json({
+            success: false,
+            message: 'Business not found'
+          });
+        }
 
-//         // Add ownership check
-//         if (existingBusiness.userId.toString() !== userId.toString()) {
-//           return res.status(403).json({
-//             success: false,
-//             message: 'Unauthorized: You can only update your own business'
-//           });
-//         }
+        // Add ownership check
+        if (existingBusiness.userId.toString() !== userId.toString()) {
+          return res.status(403).json({
+            success: false,
+            message: 'Unauthorized: You can only update your own business'
+          });
+        }
 
-//         oldImages = {
-//           image1: existingBusiness.image1,
-//           image2: existingBusiness.image2,
-//           image3: existingBusiness.image3,
-//           image4: existingBusiness.image4,
-//           image5: existingBusiness.image5
-//         };
+        oldImages = {
+          image1: existingBusiness.image1,
+          image2: existingBusiness.image2,
+          image3: existingBusiness.image3,
+          image4: existingBusiness.image4,
+          image5: existingBusiness.image5
+        };
 
-//         result = await Freelancer.findByIdAndUpdate(
-//           id,
-//           businessData,
-//           { new: true, runValidators: true }
-//         );
+        result = await Freelancer.findByIdAndUpdate(
+          id,
+          businessData,
+          { new: true, runValidators: true }
+        );
 
-//         for (let i = 1; i <= 5; i++) {
-//           const imgField = `image${i}`;
-//           if (businessData[imgField] && oldImages[imgField] && businessData[imgField] !== oldImages[imgField]) {
-//             await deleteOldImage(oldImages[imgField]);
-//           }
-//         }
+        for (let i = 1; i <= 5; i++) {
+          const imgField = `image${i}`;
+          if (businessData[imgField] && oldImages[imgField] && businessData[imgField] !== oldImages[imgField]) {
+            await deleteOldImage(oldImages[imgField]);
+          }
+        }
 
-//       } else {
-//         const newBusiness = new Freelancer(businessData);
-//         result = await newBusiness.save();
-//       }
+      } else {
+        const newBusiness = new Freelancer(businessData);
+        result = await newBusiness.save();
+      }
 
-//       return res.status(id ? 200 : 201).json({
-//         success: true,
-//         message: `Business ${id ? 'updated' : 'created'} successfully`,
-//         data: result
-//       });
+      return res.status(id ? 200 : 201).json({
+        success: true,
+        message: `Business ${id ? 'updated' : 'created'} successfully`,
+        data: result
+      });
 
-//     } catch (error) {
-//       if (req.files) {
-//         Object.values(req.files).flat().forEach(file => {
-//           fs.unlink(file.path, err => {
-//             if (err) console.error('Error deleting file after request error:', err);
-//           });
-//         });
-//       }
+    } catch (error) {
+      if (req.files) {
+        Object.values(req.files).flat().forEach(file => {
+          fs.unlink(file.path, err => {
+            if (err) console.error('Error deleting file after request error:', err);
+          });
+        });
+      }
 
-//       console.error('Error in business create/update:', error);
-//       return res.status(500).json({
-//         success: false,
-//         message: 'Failed to process business',
-//         error: error.message
-//       });
-//     }
-//   }
-// );
+      console.error('Error in business create/update:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to process business',
+        error: error.message
+      });
+    }
+  }
+);
 
 // POST route to delete a business
 router.post('/business/delete', async (req, res) => {
