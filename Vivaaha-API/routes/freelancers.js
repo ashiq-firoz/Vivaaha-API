@@ -5,6 +5,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const authMiddleware = require('../middleware/auth');
+const User = require("../models/User");
 
 // Configure multer for file storage
 const storage = multer.diskStorage({
@@ -88,6 +89,32 @@ router.post('/by-category', async (req, res) => {
     });
   }
 });
+
+// POST route to get all freelancer emails and total user count
+router.post('/emails-and-usercount', async (req, res) => {
+  try {
+    // Get all freelancer emails
+    const freelancers = await Freelancer.find({}, 'companymailid');
+    const emails = freelancers.map(f => f.companymailid);
+
+    // Get total user count
+    const totalUsers = await User.countDocuments();
+
+    return res.status(200).json({
+      success: true,
+      emails,
+      totalUsers
+    });
+  } catch (error) {
+    console.error('Error fetching emails and user count:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to fetch emails and user count',
+      error: error.message
+    });
+  }
+});
+
 // POST route to get business data for authenticated user
 router.post('/business/get-data', authMiddleware, async (req, res) => {
   try {
