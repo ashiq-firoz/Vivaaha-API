@@ -14,7 +14,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: ['*',"http://vivaaha.us","http://localhost:3000"],
+    origin: ['*',"https://vivaaha.us","http://localhost:3000","https://www.vivaaha.us"],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
