@@ -79,12 +79,16 @@ router.post("/confirm-order", auth, async (req, res) => {
     Vivaaha.us</p>
   </div>
 `;
-
+    try{
     await SendMail(
       content,
       "📅 New Booking Request Received",
       freelancer.companymailid
     );
+  } 
+  catch(err){
+    
+  }
 
     const content2 = `
   <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
@@ -101,13 +105,17 @@ router.post("/confirm-order", auth, async (req, res) => {
     <p>Best regards,<br>
     Vivaaha.us</p>
   </div>
-`;
-
+`; 
+    try{
     await SendMail(
       content2,
       "📨 Booking Request Sent Successfully",
       user.email
     );
+  }
+  catch(err){
+    
+  }
 
     res.json({ Status: true });
   } catch (err) {
