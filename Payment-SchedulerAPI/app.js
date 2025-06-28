@@ -15,7 +15,7 @@ var app = express();
 
 // Middleware
 app.use(cors({
-    origin: ['*',"https://wedding-planner-weld.vercel.app","http://localhost:3000"],
+    origin: ['*',"https://vivaaha.us","https://www.vivaaha.us","http://localhost:3000"],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
