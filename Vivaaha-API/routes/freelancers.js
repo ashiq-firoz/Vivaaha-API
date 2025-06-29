@@ -70,14 +70,48 @@ router.post('/by-category', async (req, res) => {
         message: 'Category is required'
       });
     }
-   // console.log(category)
+
     const freelancers = await Freelancer.find({ category });
 
-    //console.log(freelancers)
+    // For each freelancer, fetch address fields from User and combine
+    const freelancersWithAddress = await Promise.all(
+      freelancers.map(async (freelancer) => {
+        let address = "";
+        try {
+          const user = await User.findById(freelancer.userId);
+          if (user) {
+            const {
+              addressline1 = "",
+              adressline2 = "",
+              city = "",
+              state = "",
+              country = "",
+              pin = ""
+            } = user;
+            // Combine address fields, filter out empty, join with comma
+            address = [
+              addressline1,
+              adressline2,
+              city,
+              state,
+              country,
+              pin
+            ].filter(Boolean).join(', ');
+          }
+        } catch (err) {
+          // If user not found or error, leave address as empty string
+        }
+        // Return freelancer object with address field
+        return {
+          ...freelancer.toObject(),
+          address
+        };
+      })
+    );
 
     return res.status(200).json({
       success: true,
-      data: freelancers
+      data: freelancersWithAddress
     });
     
   } catch (error) {
