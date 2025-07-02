@@ -16,6 +16,7 @@ const FreelancerSchema = new mongoose.Schema(
       default : ''
     },
     category: { type: String, enum: ["Venues", "Planning", "Decorations", "Photographers","Artists","Catering"], default:"Venues"},
+    
     location:{
       type : String,
       default : "",

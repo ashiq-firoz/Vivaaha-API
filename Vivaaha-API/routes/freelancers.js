@@ -124,6 +124,50 @@ router.post('/by-category', async (req, res) => {
   }
 });
 
+router.post('/get-by-id', async (req, res) => {
+  try {
+    const { id } = req.body;
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: 'Freelance ID is required'
+      });
+    }
+    const freelancer = await Freelancer.findById(id);
+    if (!freelancer) {
+      return res.status(404).json({
+        success: false,
+        message: 'Freelancer not found'
+      });
+    }
+
+    // Fetch user.phone using freelancer.userId
+    let phone = "";
+    if (freelancer.userId) {
+      const user = await User.findById(freelancer.userId);
+      if (user && user.phone) {
+        phone = user.phone;
+      }
+    }
+
+    // Append phone to result
+    return res.status(200).json({
+      success: true,
+      data: {
+        ...freelancer.toObject(),
+        phone
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching freelancer by ID:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to fetch freelancer',
+      error: error.message
+    });
+  }
+});
+
 // POST route to get all freelancer emails and total user count
 router.post('/emails-and-usercount', async (req, res) => {
   try {
